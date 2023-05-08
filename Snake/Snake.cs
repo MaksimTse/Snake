@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 
 namespace Snake
 {
     class Snake : Figure
     {
+        private int score;
         Direction direction;
         public Snake(Point tail, int length, Direction _direction)
         {
@@ -47,6 +49,21 @@ namespace Snake
                 direction = Direction.DOWN;
             else if (key == ConsoleKey.UpArrow)
                 direction = Direction.UP;
+        }
+        internal bool Eat(Point food)
+        {
+            Point head = GetNextPoint() ;
+            if (head.IsHit(food))
+            {
+                food.sym = head.sym;
+                pList.Add(food);
+                score++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
