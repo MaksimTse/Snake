@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -90,6 +90,7 @@ namespace Snake
             else
                 return false;
         }
+
         internal bool Eat3(Point food3)
         {
             Point head = GetNextPoint();
@@ -97,6 +98,32 @@ namespace Snake
             {
                 food3.sym = head.sym;
                 pList.Add(food3);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        internal bool Eat4(Point food4)
+        {
+            Point head = GetNextPoint();
+            if (head.IsHit(food4))
+            {
+                food4.sym = head.sym;
+                pList.Add(food4);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        internal bool Eat5(Point food5)
+        {
+            Point head = GetNextPoint();
+            if (head.IsHit(food5))
+            {
+                food5.sym = head.sym;
+                pList.Add(food5);
                 return true;
             }
             else
