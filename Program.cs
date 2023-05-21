@@ -11,16 +11,8 @@ namespace Snake
     {
         private static int Score;
         private static Snake snake;
-        private static FoodCreator foodCreator;
-        private static FoodCreator foodCreator2;
-        private static FoodCreator foodCreator3;
-        private static FoodCreator foodCreator4;
-        private static FoodCreator foodCreator5;
-        private static Point food;
-        private static Point food2;
-        private static Point food3;
-        private static Point food4;
-        private static Point food5;
+        private static FoodCreator foodCreator, foodCreator2, foodCreator3, foodCreator4, foodCreator5;
+        private static Point food, food2, food3, food4, food5;
 
         static void Main(string[] args)
         {
