@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,6 +70,21 @@ namespace Snake
             {
                 food.sym = head.sym;
                 pList.Add(food);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        internal bool Eat2(Point food2)
+        {
+            Point head = GetNextPoint();
+            if (head.IsHit(food2))
+            {
+                food2.sym = head.sym;
+                pList.Add(food2);
+                food2.sym = head.sym;
+                pList.Add(food2);
                 return true;
             }
             else
