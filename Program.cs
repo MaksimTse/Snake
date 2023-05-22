@@ -1,27 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Snake;
 
 namespace Snake
 {
     class Program
     {
+        private static Sounds sounds;
         private static int Score;
         private static Snake snake;
         private static FoodCreator foodCreator, foodCreator2, foodCreator3, foodCreator4, foodCreator5;
         private static Point food, food2, food3, food4, food5;
+        private static Stopwatch stopwatch;
 
         static void Main(string[] args)
         {
             int Speed = 140;
 
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             Console.SetWindowSize(80, 25);
 
-            Music game = new Music();
-            _ = game.Background_music("../../../Background_Music.mp3");
+            sounds = new Sounds(".");
+            sounds.PlayBack();
 
             Walls walls = new Walls(80, 25);
             walls.Draw();
@@ -60,6 +67,7 @@ namespace Snake
                 if (walls.IsHit(snake) || snake.IsHitTail())
                 {
                     break;
+                    stopwatch.Stop();
                 }
 
                 if (snake.Eat(food))
@@ -71,9 +79,13 @@ namespace Snake
                     Score += 1;
                     food = foodCreator.CreateFood();
                     food.Draw();
+                    sounds.PlayEat();
+                    Thread.Sleep(200);
+                    sounds.PlayBack();
                 }
                 else if (Count == 2)
                 {
+                    food2.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     food2 = foodCreator2.CreateFood();
                     food2.Draw();
@@ -85,21 +97,28 @@ namespace Snake
                     Count = 0;
                     Count3 += 1;
                     Score += 2;
+                    sounds.PlayEat();
+                    Thread.Sleep(200);
+                    sounds.PlayBack();
                 }
                 else if (Count2 == 4)
                 {
+                    food3.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     food3 = foodCreator3.CreateFood();
                     food3.Draw();
                     Count2 = 0;
                 }
 
-                if (snake.Eat3(food3))
+                if (snake.Eat(food3))
                 {
                     Speed -= 20;
                     Count2 = 0;
                     Count3 += 1;
                     Score += 2;
+                    sounds.PlayEat();
+                    Thread.Sleep(200);
+                    sounds.PlayBack();
                 }
 
                 if (Count3 >= 5)
@@ -112,30 +131,34 @@ namespace Snake
 
                     if (foodType == 0)
                     {
+                        food5.Clear();
+                        food4.Clear();
                         food4 = foodCreator4.CreateFood();
                         food4.Draw();
                     }
                     else
                     {
+                        food4.Clear();
+                        food5.Clear();
                         food5 = foodCreator5.CreateFood();
                         food5.Draw();
                     }
                 }
-                if (snake.Eat4(food4))
+                if (snake.Eat(food4))
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Score -= 3;
-                    food4 = foodCreator4.CreateFood();
-                    food4.Draw();
+                    sounds.PlayEat();
+                    Thread.Sleep(200);
+                    sounds.PlayBack();
                 }
 
-                if (snake.Eat5(food5))
+                if (snake.Eat(food5))
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Score += 1;
                     Speed += 10;
-                    food5 = foodCreator5.CreateFood();
-                    food5.Draw();
+                    sounds.PlayEat();
+                    Thread.Sleep(200);
+                    sounds.PlayBack();
                 }
 
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -155,15 +178,20 @@ namespace Snake
         }
 
         static void WriteGameOver()
-            {
+        {
             int xOffset = 25;
             int yOffset = 8;
             Console.Clear();
+            stopwatch.Stop();
+            TimeSpan timeSpan = stopwatch.Elapsed;
+            string time = timeSpan.ToString(@"mm\:ss");
+            sounds.PlayGameOver();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(xOffset, yOffset++);
             WriteText("============================", xOffset, yOffset++);
             WriteText("G A M E   O V E R", xOffset + 5, yOffset++);
             WriteText($"You got {Score} Points!", xOffset + 5, yOffset++);
+            WriteText($"Time spent: {time}", xOffset + 5, yOffset++);
             yOffset++;
             WriteText("Autor: Someone", xOffset + 6, yOffset++);
             WriteText("Special for TTHK", xOffset + 5, yOffset++);
@@ -176,7 +204,7 @@ namespace Snake
 
             string leaderboardFile = "LeaderBoard.txt";
 
-            string points = $"{playerName}: {Score} Points";
+            string points = $"{playerName}: {Score} Points, {time}";
             try
             {
                 using (StreamWriter writer = new StreamWriter(leaderboardFile, true))
@@ -190,7 +218,6 @@ namespace Snake
                 Console.WriteLine("Error writing to LeaderBoard.txt: " + ex.Message);
             }
         }
-
         static void WriteText(string text, int xOffset, int yOffset)
         {
             Console.SetCursorPosition(xOffset, yOffset);
