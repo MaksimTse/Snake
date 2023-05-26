@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading;
 
@@ -166,7 +166,7 @@ namespace Snake
                     snake.HandleKey(key.Key);
                 }
             }
-
+            sounds.Stop();
             GameOver gameOver = new GameOver(Score, stopwatch.Elapsed);
             gameOver.WriteGameOver();
 
