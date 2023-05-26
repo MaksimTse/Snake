@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -19,12 +19,14 @@ namespace Snake
 
         public void WriteGameOver()
         {
+
             int xOffset = 25;
             int yOffset = 8;
             Console.Clear();
             stopwatch.Stop();
             string time = elapsedTime.ToString(@"mm\:ss");
             Sounds sounds = new Sounds(".");
+            sounds.Stop();
             sounds.PlayGameOver();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(xOffset, yOffset++);
