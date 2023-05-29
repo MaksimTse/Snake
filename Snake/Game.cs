@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Snake
@@ -20,7 +21,7 @@ namespace Snake
             stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Console.SetWindowSize(80, 25);
+            Console.SetWindowSize(80, 27);
 
             sounds = new Sounds(".");
             sounds.PlayBack();
@@ -59,6 +60,20 @@ namespace Snake
 
             while (true)
             {
+                int originalCursorLeft = Console.CursorLeft;
+                int originalCursorTop = Console.CursorTop;
+
+                Console.SetCursorPosition(Console.WindowWidth - 80, 25);
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("Score: " + Score);
+                Console.ResetColor();
+
+                Console.SetCursorPosition(Console.WindowWidth - 80, 26);
+                Console.Write("Time: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
+
+                Console.SetCursorPosition(originalCursorLeft, originalCursorTop);
+
                 if (walls.IsHit(snake) || snake.IsHitTail())
                 {
                     break;
@@ -92,7 +107,7 @@ namespace Snake
                     Count3 += 1;
                     Score += 2;
                     sounds.PlayEat();
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     sounds.PlayBack();
                 }
                 else if (Count2 == 4)
@@ -111,7 +126,7 @@ namespace Snake
                     Count3 += 1;
                     Score += 2;
                     sounds.PlayEat();
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     sounds.PlayBack();
                 }
 
@@ -142,7 +157,7 @@ namespace Snake
                 {
                     Score -= 3;
                     sounds.PlayEat();
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     sounds.PlayBack();
                 }
 
@@ -151,7 +166,7 @@ namespace Snake
                     Score += 1;
                     Speed += 10;
                     sounds.PlayEat();
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     sounds.PlayBack();
                 }
 
